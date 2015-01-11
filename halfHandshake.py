@@ -62,8 +62,9 @@ if __name__ == "__main__":
         print "Error reading file"
         exit(2)
 
-    if header.ll_type != 1 and header.ll_type != 105:
-        print "unsupported linklayer type, only supports ethernet and 802.11"
+    if header.ll_type != 1:
+    #and header.ll_type != 105:
+        print "unsupported linklayer type, only supports ethernet"
         exit(2)
 
     if header.ll_type == 105:
