@@ -62,14 +62,11 @@ if __name__ == "__main__":
         print "Error reading file"
         exit(2)
 
-    if header.ll_type != 1:
-    #and header.ll_type != 105:
-        print "unsupported linklayer type, only supports ethernet"
+    if header.ll_type != 1 and header.ll_type != 105:
+        print "unsupported linklayer type, only supports ethernet and 802.11"
         exit(2)
-
+    clients = {}
     if header.ll_type == 105:
-        counter = 0
-        APs = {}
         for packet in caps.packets:
             auth = packet[1].raw()[32:34]
             if auth == '\x88\x8e':
@@ -80,16 +77,24 @@ if __name__ == "__main__":
                 relivent = True
                 if part == '\x00\x8a':
                     message = 1
+                    client = dest
+                    Anonce = packet[1].raw()[51:83]
+                    info = {'AP': AP, 'client': client, 'Anonce': Anonce, 'message': message}
                 elif part == '\x01\x0a':
+                    Snonce = packet[1].raw()[51:83]
+                    client = source
+                    mic = packet[1].raw()[115:131]
+                    data = packet[1].raw()[34:115] + "\x00"*16 + packet[1].raw()[131:]
                     message = 2
+                    info = {'AP': AP, 'data': data, 'client': client, 'Snonce': Snonce, 'mic': mic, 'message': message}
                 else:
                     relivent = False
                 if relivent:
-                    APs[AP] = { dest: dest, source: source, part: part, packet: packet[1].raw()} 
-            counter += 1
-        print counter
+                    if info['client'] in clients:
+                        clients[info['client']].append(info)
+                    else:
+                        clients[info['client']] = [info]
     else:
-        clients = {}
         for packet in caps.packets:
             auth = packet[1].raw()[12:14]
             if auth == '\x88\x8e':
