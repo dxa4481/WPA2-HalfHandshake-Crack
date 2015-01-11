@@ -14,7 +14,7 @@ Conventional WPA2 attacks work by listening for a handshake between client and A
 ```
 
 * **-r** Where to read input pcap file with half handshake (works with full handshakes too)
-* **-m** AP mac address
+* **-m** AP mac address (From the 'fake' access point that was used during the capture)
 * **-s** AP SSID
 * **-d** (optional) Where to read dictionary from
 
