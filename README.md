@@ -1,5 +1,5 @@
 # WPA2-HalfHandshake-Crack
-Conventional WPA2 attacks work by listening for a handshake between client and Access Point. This is a Proof of Concept to show it is not necessary to have the Access Point present. A person can simply listen for WPA2 probes from any client withen range, and then throw up an Access Point with that SSID. Though the authentication will fail, there is enough information in the failed handshake to run a dictionary attack against the failed handshake. 
+Conventional WPA2 attacks work by listening for a handshake between client and Access Point. This full fourway handshake is then used in a dictonary attack. This tool is a Proof of Concept to show it is not necessary to have the Access Point present. A person can simply listen for WPA2 probes from any client withen range, and then throw up an Access Point with that SSID. Though the authentication will fail, there is enough information in the failed handshake to run a dictionary attack against the failed handshake. 
 
 ## Install
 
