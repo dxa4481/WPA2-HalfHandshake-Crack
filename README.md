@@ -42,4 +42,6 @@ http://ubuntuhandbook.org/index.php/2014/09/3-ways-create-wifi-hotspot-ubuntu/
 sudo tcpdump -i wlan0 -s 65535 -w file.cap
 ```
 
+#### (optional) Deauthenticate clients from nearby WiFi networks to increase probes
 
+If there are not enough unassociated clients, the aircrack suite can be used to deauthenticate clients off nearby networks http://www.aircrack-ng.org/doku.php?id=deauthentication
