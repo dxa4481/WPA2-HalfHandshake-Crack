@@ -39,4 +39,5 @@ sudo tcpdump -i wlan0 -s 65535 -w file.cap
 sudo airmon-ng start wlan0
 sudo airodump-ng mon0
 ```
-  You should begin to see device probes with BSSID set as (not associated) appearing at the bottom. 
+
+  You should begin to see device probes with BSSID set as (not associated) appearing at the bottom. If WPA2 SSIDs pop up for these probes, these devices can be targeted
