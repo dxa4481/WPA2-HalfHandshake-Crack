@@ -31,7 +31,6 @@ def crackProcess(ssid, clientMac, APMac, Anonce, Snonce, mic, data, passQueue, f
         if mic == calculatedMic:
             foundPassQ.put(passPhrase)
 
-
 def crack(ssid, clientMac, APMac, Anonce, Snonce, mic, data, passQueue):
     foundPassQ = Queue()
     processes = []
@@ -54,11 +53,13 @@ def crack(ssid, clientMac, APMac, Anonce, Snonce, mic, data, passQueue):
             pass
         if foundPassQ.empty():
             if passQueue.empty():
-                for p in processes:
-                    p.terminate()
-                return False
+                returnVal = False
+                break
         else:
-            for p in processes:
-                p.terminate()
-            return foundPassQ.get()
+            passphrase = foundPassQ.get()
+            returnVal = passphrase
+            break
+    for p in processes:
+        p.terminate()
+    return returnVal
 

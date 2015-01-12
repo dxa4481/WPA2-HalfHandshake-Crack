@@ -135,5 +135,5 @@ if __name__ == "__main__":
         print "Unable to find passphrase"
     else:
         print "Passphrase found! " + cracked
-    exit()
+    exit(0)
 
