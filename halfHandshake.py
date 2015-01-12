@@ -1,9 +1,9 @@
 from pcapParser import load_savefile
 from cracker import crack
+from multiprocessing import Queue
 
 
-
-def crackClients(clients, usersMac, SSID, words):
+def crackClients(clients, usersMac, SSID, passphraseQ):
     clientHandshakes = []
     for client in clients:
         handshake = []
@@ -18,7 +18,7 @@ def crackClients(clients, usersMac, SSID, words):
                 handshake = []
     for clientHandshake in clientHandshakes:
         if clientHandshake[0]['AP'] == usersMac:
-            cracked = crack(SSID, clientHandshake[0]['client'], clientHandshake[0]['AP'], clientHandshake[0]['Anonce'], clientHandshake[1]['Snonce'], clientHandshake[1]['mic'], clientHandshake[1]['data'], words)
+            cracked = crack(SSID, clientHandshake[0]['client'], clientHandshake[0]['AP'], clientHandshake[0]['Anonce'], clientHandshake[1]['Snonce'], clientHandshake[1]['mic'], clientHandshake[1]['data'], passphraseQ)
             if cracked != False:
                 return cracked
     return False
@@ -31,9 +31,6 @@ if __name__ == "__main__":
     except getopt.GetoptError:          
         print "bad args"
         exit(2)
-    f = open('dictionary.txt', 'r')
-    words = f.read().split('\n')
-    f.close()
     for opt, arg in opts:
         if opt == '-r':
             readFile = arg
@@ -44,11 +41,23 @@ if __name__ == "__main__":
         if opt == '-d':
             try:
                 f = open(arg, 'r')
-                words = f.read().split('\n')
+                passphraseQ = Queue()
+                for passphrase in f.read().split('\n'):
+                    passphraseQ.put(passphrase)
                 f.close()
             except IOError:
                 print "Error reading dictionary"
                 exit(2)
+    print "loading dictionary..."
+    try:
+        passphraseQ
+    except:
+        f = open('dictionary.txt', 'r')
+        passphraseQ = Queue()
+        for passphrase in f.read().split('\n'):
+            passphraseQ.put(passphrase)
+        f.close()
+
     try:
         usersMac
         SSID
@@ -121,10 +130,10 @@ if __name__ == "__main__":
                         clients[info['client']].append(info)
                     else:
                         clients[info['client']] = [info]
-    cracked = crackClients(clients, usersMac, SSID, words)
+    cracked = crackClients(clients, usersMac, SSID, passphraseQ)
     if cracked == False:
         print "Unable to find passphrase"
     else:
         print "Passphrase found! " + cracked
-
+    exit()
 
