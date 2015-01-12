@@ -3,7 +3,7 @@ from hashlib import sha1
 from binascii import a2b_hex, b2a_hex, unhexlify
 from pbkdf2_ctypes import pbkdf2_bin
 from datetime import datetime
-from multiprocessing import Process, Queue, cpu_count
+from multiprocessing import Pool, Queue, cpu_count
 from time import sleep
 
 numOfPs = cpu_count()
@@ -33,16 +33,12 @@ def crackProcess(ssid, clientMac, APMac, Anonce, Snonce, mic, data, passQueue, f
 
 def crack(ssid, clientMac, APMac, Anonce, Snonce, mic, data, passQueue):
     foundPassQ = Queue()
-    processes = []
     try:
         timeA = datetime.now()
         startSize = passQueue.qsize()
     except:
         pass
-    for i in range(numOfPs):
-        p = Process(target=crackProcess, args=(ssid, clientMac, APMac, Anonce, Snonce, mic, data, passQueue, foundPassQ))
-        p.start()
-        processes.append(p)
+    pool = Pool(numOfPs, crackProcess, (ssid, clientMac, APMac, Anonce, Snonce, mic, data, passQueue, foundPassQ))
     while True:
         sleep(1)
         try:
@@ -59,7 +55,6 @@ def crack(ssid, clientMac, APMac, Anonce, Snonce, mic, data, passQueue):
             passphrase = foundPassQ.get()
             returnVal = passphrase
             break
-    for p in processes:
-        p.terminate()
+    pool.terminate()
     return returnVal
 
