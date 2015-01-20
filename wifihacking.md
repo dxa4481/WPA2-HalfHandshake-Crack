@@ -77,11 +77,11 @@ Above are all Access Points with open networks in range. Below the Access Points
 Because these access points do not require any encryption _Content inspection_ is trivial. The following command can be used to capture all traffic on an Access Point and save it to a pcap file
 
 ``` bash
-$ sudo airodump-ng -c 10 --bssid 06:1D:D4:2C:ED:60 -w xfinitywifi.pcap mon0
+$ sudo airodump-ng -c 11 --bssid 06:1D:D4:2C:ED:60 -w xfinitywifi.pcap mon0
 ```
 Where the channel (-c 11) and bssid (--bssid 06:1D:D4:2C:ED:60) are obtained from the scan above.
 
-Some traffic may be encrypted on the application layer with SSL/TLS, however anything that isn't can be viewed in plain text in this capture file. To view plane text bits of it you can run **strings** on the file, or you can simply open the file up in [wireshark](https://www.wireshark.org/) for your viewing pleasure.
+Some traffic may be encrypted on the application layer with SSL/TLS, however anything that isn't can be viewed in plain text from this capture file. To view the plain text bits of it you can run **strings** on the file, or you can simply open the file up in [wireshark](https://www.wireshark.org/) for your viewing pleasure.
 
 Clients that are connected to open networks will probably attempt to reconnect if deauthenticated. For this reason you can setup an access point with the same SSID and send deauth packets to connected users until they connect to your access point.
 
@@ -91,7 +91,7 @@ Once you have users connected to your ad-hoc network you are in a position for b
 
 ## WPA/WPA2 networks
 
-The only way to perform _Content injection_ or _content inspection_ on a WPA/WPA2 network is to run a dictionary or brute force attack against the authentication handshake. This can be captured and run performed locally for a quick crack if you're lucky. Repeating the process for scanning for networks in the previous section, you can scan for networks using the following 
+The only way to perform _content injection_ or _content inspection_ on a WPA/WPA2 network is to run a dictionary or brute force attack against the authentication handshake. This can be captured and performed locally for a quick crack if you're lucky. Repeating the process for scanning for networks in the previous section, you can scan for networks using the following 
 
 ```bash
 $ sudo airodump-ng mon0
@@ -155,4 +155,18 @@ Aircrack does not have a built in way of doing this so I wrote a tool for it see
 
 Once cracked, you can throw up an ad-hoc network and have the client probing for that network connect to you.
 
+##Triangulating clients
 
+You'll notice from the above airodump outputs, PWR is an output for each client.
+
+Recreate the airodump output with the following
+
+```bash
+$ sudo airodump-ng mon0
+```
+
+Although this value is greatly interfered with by walls, people, furniture, and other signal interference obstacles, with some degree of certainty it can be used to approximate that client's location.  
+
+Three wifi devices with identical hardware will be needed at a minimum, though more devices refines the location more accurately.
+
+I've been told due to interference with 3 devices this method will give you a resolution of about 20 feet.
