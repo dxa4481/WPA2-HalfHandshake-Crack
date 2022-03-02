@@ -1,6 +1,6 @@
 # WiFi hacking
 
-##Getting started
+## Getting started
 For many of these examples I'll be making use of the [aircrack suite](http://www.aircrack-ng.org/) which is a tool designed for WiFi hacking.
 
 Some of these attacks require multiple WiFi devices. Your chipset may or may not have all the required built in functionality for these attacks, so I recommend buying one you know is compatible. I know the [Ralink RT3070](http://www.amazon.com/gp/product/B009UWLF62/ref=oh_aui_detailpage_o01_s00?ie=UTF8&psc=1) is completely compatible with everything in this post.
@@ -24,7 +24,7 @@ Note: Sending packets (generally associated with _Content injection_ and _Denial
 
 I'll be talking about the types of situations you can perform each type of attack.  
 
-##Deauthentication
+## Deauthentication
 Built into the 802.11 protocol there is a deauthenticate packet. This packet is normally sent to clients from an Access Point to let the client know the connection is being terminated. It doesn't matter what type of encryption the Access Point is using; these packets look the same regardless. This means they can always be used by an attacker as a _Denial of Service_ and it's often combined with other attacks discussed later. 
 
 This type of attack generally comes in two different flavors seen below
@@ -42,7 +42,7 @@ $ aireplay-ng -0 1 -a 00:14:6C:7E:40:80 -c 00:0F:B5:34:30:30 mon0
 
 Clients will generally attempt to reconnect after being deauthenticated, however these can be also be repeated (the 1 in the above commands can be changed to the number of repeat times desired).
 
-##Open networks
+## Open networks
 
 An open WiFi network is a network that does not use any type of encryption between client and Access Point. These are often found in coffee shops and other public areas.
 
@@ -134,11 +134,11 @@ If you capture a full handshake, and you manage to crack the password, you have 
 
 If you know the passphrase but you did not capture the full handshake, you will probably not be able to decrypt the traffic from that dump however one thing I noticed is that the Nonces used to calculate the keys in the handshake are often very low entropy and may be predictable.
 
-##WEP Networks
+## WEP Networks
 
 I'm not going to spend too much time talking about WEP networks because they are not as common anymore. The following guide can be used to crack WEP networks http://www.aircrack-ng.org/doku.php?id=simple_wep_crack
 
-##No network, just clients
+## No network, just clients
 Clients will send probes asking for WiFi networks with known SSIDs. These are broadcasted out unencrypted. They can be viewed with the same WiFi network monitor command used above
 
 ```bash
@@ -155,7 +155,7 @@ Aircrack does not have a built in way of doing this so I wrote a tool for it see
 
 Once cracked, you can throw up an ad-hoc network and have the client probing for that network connect to you.
 
-##Trilaterating clients
+## Trilaterating clients
 
 You'll notice from the above airodump outputs, PWR is an output for each client.
 
